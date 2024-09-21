@@ -2,12 +2,13 @@
 #define SAVE_H
 
 #include <string>
+#include "image.h" 
 
 namespace kalam {
 class Save {
 public:
-  bool savePNG(const std::string &filepath);
-  bool saveJPEG(const std::string &filepath);
+    static bool savePNG(const std::string& filepath, const Image& image);
+    static bool saveJPEG(const std::string& filepath, const Image& image);
 };
 } // namespace kalam
 
