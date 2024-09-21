@@ -1,11 +1,14 @@
 #ifndef KALAM_H
 #define KALAM_H
 
+#include "image.h"
+
 namespace kalam {
+
 class Kalam {
 public:
-  void initialize();
+    void initialize();
 };
-} // namespace kalam
+}
 
-#endif
+#endif // KALAM_H
