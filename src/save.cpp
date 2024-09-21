@@ -1,63 +1,31 @@
 #include "save.h"
-#include <png.h>
-#include <jpeglib.h>
-#include <cstdio>
+#include "image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 namespace kalam {
 
-bool Save::savePNG(const std::string& filepath) {
-    FILE* file = fopen(filepath.c_str(), "wb");
-    if (!file) return false;
+bool Save::savePNG(const std::string& filepath, const Image& image) {
+    int width = image.getWidth();
+    int height = image.getHeight();
+    int channels = image.getChannels();
+    const std::vector<unsigned char>& data = image.getData();
 
-    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-    if (!png) {
-        fclose(file);
-        return false;
-    }
-
-    png_infop info = png_create_info_struct(png);
-    if (!info) {
-        png_destroy_write_struct(&png, nullptr);
-        fclose(file);
-        return false;
-    }
-
-    if (setjmp(png_jmpbuf(png))) {
-        png_destroy_write_struct(&png, &info);
-        fclose(file);
-        return false;
-    }
-
-    png_init_io(png, file);
-    png_set_IHDR(png, info, 800, 600, 8, PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-    png_write_info(png, info);
-    png_destroy_write_struct(&png, &info);
-    fclose(file);
-    return true;
+    int success = stbi_write_png(filepath.c_str(), width, height, channels, data.data(), width * channels);
+    
+    return success != 0; 
 }
 
-bool Save::saveJPEG(const std::string& filepath) {
-    FILE* file = fopen(filepath.c_str(), "wb");
-    if (!file) return false;
+bool Save::saveJPEG(const std::string& filepath, const Image& image) {
+    int width = image.getWidth();
+    int height = image.getHeight();
+    int channels = image.getChannels();
+    const std::vector<unsigned char>& data = image.getData();
 
-    jpeg_compress_struct cinfo;
-    jpeg_error_mgr jerr;
-    cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_compress(&cinfo);
-    jpeg_stdio_dest(&cinfo, file);
+    int quality = 90; 
+    int success = stbi_write_jpg(filepath.c_str(), width, height, channels, data.data(), quality);
 
-    cinfo.image_width = 800;
-    cinfo.image_height = 600;
-    cinfo.input_components = 3;
-    cinfo.in_color_space = JCS_RGB;
-
-    jpeg_set_defaults(&cinfo);
-    jpeg_start_compress(&cinfo, TRUE);
-
-    jpeg_finish_compress(&cinfo);
-    jpeg_destroy_compress(&cinfo);
-    fclose(file);
-    return true;
+    return success != 0; 
 }
 
-}
+} // namespace kalam

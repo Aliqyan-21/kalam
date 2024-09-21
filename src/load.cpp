@@ -1,56 +1,38 @@
 #include "load.h"
-#include <png.h>
-#include <jpeglib.h>
-#include <cstdio>
+#include "image.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 namespace kalam {
 
-bool Load::loadPNG(const std::string& filepath) {
-    FILE* file = fopen(filepath.c_str(), "rb");
-    if (!file) return false;
-
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-    if (!png) {
-        fclose(file);
-        return false;
+bool Load::loadPNG(const std::string& filepath, Image& image) {
+    int width, height, channels;
+    unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+    
+    if (!data) {
+        return false; 
     }
 
-    png_infop info = png_create_info_struct(png);
-    if (!info) {
-        png_destroy_read_struct(&png, nullptr, nullptr);
-        fclose(file);
-        return false;
-    }
+    std::vector<unsigned char> imageData(data, data + (width * height * channels));
+    image.setData(width, height, channels, std::move(imageData));
 
-    if (setjmp(png_jmpbuf(png))) {
-        png_destroy_read_struct(&png, &info, nullptr);
-        fclose(file);
-        return false;
-    }
-
-    png_init_io(png, file);
-    png_read_info(png, info);
-    png_destroy_read_struct(&png, &info, nullptr);
-    fclose(file);
+    stbi_image_free(data); 
     return true;
 }
 
-bool Load::loadJPEG(const std::string& filepath) {
-    FILE* file = fopen(filepath.c_str(), "rb");
-    if (!file) return false;
+bool Load::loadJPEG(const std::string& filepath, Image& image) {
+    int width, height, channels;
+    unsigned char* data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+    
+    if (!data) {
+        return false; 
+    }
 
-    jpeg_decompress_struct cinfo;
-    jpeg_error_mgr jerr;
-    cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_decompress(&cinfo);
-    jpeg_stdio_src(&cinfo, file);
-    jpeg_read_header(&cinfo, TRUE);
-    jpeg_start_decompress(&cinfo);
+    std::vector<unsigned char> imageData(data, data + (width * height * channels));
+    image.setData(width, height, channels, std::move(imageData));
 
-    jpeg_finish_decompress(&cinfo);
-    jpeg_destroy_decompress(&cinfo);
-    fclose(file);
+    stbi_image_free(data); 
     return true;
 }
 
-}
+} // namespace kalam
