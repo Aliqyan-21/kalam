@@ -2,7 +2,7 @@
 #include <kalam.h>
 
 int main() {
-  // this is how kalam will be used
+  // this is how you can use kalam directly
   kalam::Image img;
   if (!img.load("pathtoimage/image.png")) {
     std::cout << "Image not loaded" << std::endl;
