@@ -1,6 +1,6 @@
-#include "image.h"
 #include <cassert>
 #include <iostream>
+#include <kalam.h>
 
 int main(void) {
   kalam::Image img;
