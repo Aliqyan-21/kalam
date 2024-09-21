@@ -1,29 +1,40 @@
-cmake_minimum_required(VERSION 3.28.2)
-project(kalam VERSION 1.0.1)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+cmake_minimum_required(VERSION 3.10)
+project(kalam VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 20)
 
-add_library(
-  kalam
-  src/kalam.cpp
-  src/image.cpp
-  src/load.cpp
-  src/save.cpp
-  src/utils.cpp
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+
+include_directories(include)
+
+add_library(kalam src/image.cpp src/load.cpp src/save.cpp src/kalam.cpp)
+
+set_target_properties(kalam PROPERTIES 
+    VERSION ${PROJECT_VERSION}
+    SOVERSION 1
 )
 
-target_include_directories(kalam PUBLIC include)
+install(TARGETS kalam
+    EXPORT kalamConfig
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
+)
 
-find_package(PNG REQUIRED)
-find_package(JPEG REQUIRED)
+install(DIRECTORY include/ DESTINATION include)
 
-target_link_libraries(kalam PRIVATE PNG::PNG JPEG::JPEG)
+install(EXPORT kalamConfig DESTINATION lib/cmake/kalam)
 
-add_executable(example examples/example_usage.cpp)
-target_link_libraries(example PRIVATE kalam)
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/kalamConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
 
-enable_testing()
-add_subdirectory(tests)
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/kalamConfigVersion.cmake"
+    DESTINATION lib/cmake/kalam
+)
