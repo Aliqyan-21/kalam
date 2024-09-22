@@ -3,6 +3,16 @@
 Kalam is a simple, easy-to-use C++ library designed for handling basic image operations such as loading, saving, and viewing images. It aims
 to streamline the process of working with images by providing straightforward interfaces, allowing users to perform common tasks with minimal code and in easy way.
 
+## Why I Created Kalam
+
+As a developer exploring the depths of C++, I often found that many existing libraries for image handling were either too complex or required heavy dependencies, making them difficult to integrate, especially for beginners.
+
+`Kalam` was born out of the need for a lightweight, minimalistic library that simplifies basic image operations without overwhelming the user.
+
+## Why The Name - Kalam
+
+The name "Kalam" has a special significance—it means "pen" in several languages, symbolizing creativity, expression, and the act of making ideas tangible. Just as a pen is a simple yet powerful tool that brings thoughts to life on paper, this library serves as a tool that simplifies and enables image handling in C++. Naming it `Kalam` reflects the library’s aim: to be a creative, intuitive tool that empowers developers to handle images effortlessly.
+
 ## Features
 
 - Load images in common formats like PNG and JPEG/JPG.
