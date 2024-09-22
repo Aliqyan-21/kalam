@@ -11,6 +11,10 @@ to streamline the process of working with images by providing straightforward in
 - Cross-platform compatibility with Windows, macOS, and Linux.
 - Easy integration with other libraries for further image processing.
 
+## Documentaton pdf
+
+[docs](doc/kalam_documentation.pdf)
+
 ## Getting Started
 
 ### Requirements
@@ -21,7 +25,7 @@ to streamline the process of working with images by providing straightforward in
 
 ### Building and Installing
 
-Kalam supports both dynamic and static linking. Follow the platform-specific instructions in the documentation to build and install the library.
+Kalam supports both dynamic and static linking.
 
 #### Linux/macOS Installation Instructions:
 
