@@ -3,11 +3,24 @@
 #include "save.h"
 #include <cstdio>
 #include <cstdlib>
-#include <filesystem>
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
+
+// windows and linux inclusion of filesystem
+#if defined(__has_include)
+    #if __has_include(<filesystem>)
+        #include <filesystem>
+        namespace fs = std::filesystem;
+    #else
+        #include <boost/filesystem.hpp>
+        namespace fs = boost::filesystem;
+    #endif
+#else
+    #include <boost/filesystem.hpp>
+    namespace fs = boost::filesystem;
+#endif
 
 namespace kalam {
 
@@ -43,7 +56,7 @@ void Image::show() const {
   std::tmpnam(temp_name);
   temp_filepath = std::string(temp_name) + ".png";
 #elif __APPLE__ || __linux__
-  std::string temp_dir = std::filesystem::temp_directory_path();
+  std::string temp_dir = fs::temp_directory_path();
   temp_filepath = temp_dir + "/kalam_temp_image.png";
 #else
   std::cerr << "Unsupported operating system for displaying the image."
@@ -71,8 +84,6 @@ void Image::show() const {
               << std::endl;
   }
 
-  // to delete the temp file that was created to show the image
-  std::filesystem::remove(temp_filepath);
+  fs::remove(temp_filepath);
 }
-
-} // namespace kalam
+}
