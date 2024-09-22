@@ -13,6 +13,12 @@ to streamline the process of working with images by providing straightforward in
 
 ## Getting Started
 
+### Requirements
+
+- `cmake V(3.10 and above)`
+- `gcc and g++ capable of running c++ 20`
+- `boost library (only for windows)`
+
 ### Building and Installing
 
 Kalam supports both dynamic and static linking. Follow the platform-specific instructions in the documentation to build and install the library.
@@ -75,6 +81,14 @@ img.save("path/to/save/image.png");
 
 ```cpp
 img.show();
+```
+
+### Compiling and Running
+
+```bash
+g++ main.cpp -o main -lkalam
+
+./main
 ```
 
 ## Technical Details
