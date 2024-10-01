@@ -2,27 +2,37 @@
 #define IMAGE_H
 
 #include <string>
-#include <vector>
 
 namespace kalam {
+
 class Image {
 public:
-    bool load(const std::string &filepath);
-    bool save(const std::string &filepath);
-    void show() const;
+  Image() = default;
+  Image(int w, int h, int ch);
+  ~Image();
 
-    void setData(int w, int h, int ch, std::vector<unsigned char>&& d);
+  bool load(const std::string &filepath);
+  bool save(const std::string &filepath);
+  void show() const;
 
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
-    int getChannels() const { return channels; }
-    const std::vector<unsigned char>& getData() const { return data; }
+  void setData(int w, int h, int ch, unsigned char *d);
+  unsigned char getPixel(int x, int y, int channel) const;
+  void setPixel(int x, int y, int channel, unsigned char value);
+  bool isInBounds(int x, int y) const;
+  bool isValid() const;
+
+  int getWidth() const { return width; }
+  int getHeight() const { return height; }
+  int getChannels() const { return channels; }
+  const unsigned char *getData() const { return data; }
+
+  void copyToLargerCanvas(Image &canvas, int x_offset, int y_offset) const;
 
 private:
-    int width{0};
-    int height{0};
-    int channels{0};
-    std::vector<unsigned char> data;
+  int width{0};
+  int height{0};
+  int channels{0};
+  unsigned char *data{nullptr}; // Using raw memory instead of std::vector
 };
 } // namespace kalam
 
