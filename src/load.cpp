@@ -15,7 +15,7 @@ bool Load::loadPNG(const std::string& filepath, Image& image) {
     }
 
     std::vector<unsigned char> imageData(data, data + (width * height * channels));
-    image.setData(width, height, channels, std::move(imageData));
+    image.setData(width, height, channels, imageData.data());
 
     stbi_image_free(data); 
     return true;
@@ -30,7 +30,7 @@ bool Load::loadJPEG(const std::string& filepath, Image& image) {
     }
 
     std::vector<unsigned char> imageData(data, data + (width * height * channels));
-    image.setData(width, height, channels, std::move(imageData));
+    image.setData(width, height, channels, imageData.data());
 
     stbi_image_free(data); 
     return true;
